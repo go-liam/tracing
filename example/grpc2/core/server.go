@@ -21,8 +21,8 @@ func (s *ReadController) ReadData(ctx context.Context, in *read.Request) (*read.
 	// 调用 gRPC 服务
 	var conn *grpc.ClientConn
 	var err1 error
-	if trace2.Server.Config().IsOpen {
-		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure(), trace2.Server.CreateGRPCConnectOpts(&ctx)) // 注入
+	if trace2.Config().IsOpen {
+		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure(), trace2.CreateGRPCConnectOpts(&ctx)) // 注入
 	} else {
 		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure())
 	}

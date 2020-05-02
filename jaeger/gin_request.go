@@ -9,8 +9,8 @@ import (
 )
 
 // HttpGinTracerRequestInject :  在gin 请求中注入
-func (sv *SvJeager) HttpTracerGinRequestInject(c *gin.Context, reqHeader *http.Header) {
-	if !sv.IsOpen {
+func (sv *SvJeager) HttpGinTracerRequestInject(c *gin.Context, reqHeader *http.Header) {
+	if !sv.config.IsOpen {
 		return
 	}
 	tracer, _ := c.Get("Tracer")

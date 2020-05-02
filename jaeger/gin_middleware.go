@@ -7,15 +7,15 @@ import (
 )
 
 // NewGinMiddlewareHandle : AppName = "go-gin-api"
-func (sv *SvJeager) NewMiddlewareGinHandle(appName string) gin.HandlerFunc {
-	if !sv.IsOpen {
+func (sv *SvJeager) NewGinMiddlewareHandle(appName string) gin.HandlerFunc {
+	if !sv.config.IsOpen {
 		return func(c *gin.Context) {
 			c.Next()
 		}
 	}
 	return func(c *gin.Context) {
 		var parentSpan opentracing.Span
-		tracer, closer, _ := sv.NewJaegerTracer(appName, sv.HostPort)
+		tracer, closer, _ := sv.NewJaegerTracer(appName, sv.config.HostPort)
 		defer closer.Close()
 		spCtx, err := opentracing.GlobalTracer().Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(c.Request.Header))
 		if err != nil {

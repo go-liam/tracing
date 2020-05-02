@@ -10,7 +10,7 @@ import (
 
 // HttpTraceRequestInject : 在http 请求中注入
 func (sv *SvJeager) HttpTraceRequestInject(ctx *context.Context, reqHeader *http.Header) {
-	if !sv.IsOpen {
+	if !sv.config.IsOpen {
 		return
 	}
 	// trace: span
@@ -28,3 +28,4 @@ func (sv *SvJeager) HttpTraceRequestInject(ctx *context.Context, reqHeader *http
 		//log.Fatalf("%s: Couldn't inject headers", err)
 	}
 }
+

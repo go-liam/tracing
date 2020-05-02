@@ -7,8 +7,6 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	traceLog "github.com/opentracing/opentracing-go/log"
-	"strings"
-
 	//"github.com/opentracing/opentracing-go/log"
 	"github.com/uber/jaeger-client-go"
 	jaegerConfig "github.com/uber/jaeger-client-go/config"
@@ -20,40 +18,16 @@ import (
 
 // SvJeager ：
 type SvJeager struct {
-	config.TraceConfig
+	config *config.TraceConfig
 }
 
-// 属性
-//type TraceConfig struct {
-//	IsOpen       bool // 开关
-//	HostPort     string //  "127.0.0.1:6831"
-//	SamplerType  string  //固定采样
-//	SamplerParam float64 //1=全采样、0=不采样
-//	LogSpans     bool    // 打印日志
-//}
-
-func (sv *SvJeager) SetAttributes(info *config.TraceConfig) {
-	sv.IsOpen = info.IsOpen
-	sv.HostPort = info.HostPort
-	sv.LogSpans = info.LogSpans
-	sv.SamplerParam = info.SamplerParam
-	sv.SamplerType = info.SamplerType
+func (sv *SvJeager) Init(info *config.TraceConfig) {
+	sv.config = info
 }
 
-func (sv *SvJeager) Attributes() *config.TraceConfig {
-	info := new(config.TraceConfig)
-	info.IsOpen = sv.IsOpen
-	info.HostPort = sv.HostPort
-	info.LogSpans = sv.LogSpans
-	info.SamplerParam = sv.SamplerParam
-	info.SamplerType = sv.SamplerType
-	return info
+func (sv *SvJeager) Config() *config.TraceConfig {
+	return sv.config
 }
-
-// ServerOption grpc server option
-//func ServerOption(tracer opentracing.Tracer) grpc.ServerOption {
-//	return grpc.UnaryInterceptor(serverInterceptor(tracer))
-//}
 
 var Tracer opentracing.Tracer
 
@@ -61,15 +35,13 @@ func (sv *SvJeager) NewJaegerTracer(serviceName string, jaegerHostPort string) (
 	// 采样设置：https://www.jaegertracing.io/docs/1.17/sampling/
 	cfg := &jaegerConfig.Configuration{
 		Sampler: &jaegerConfig.SamplerConfig{
-			Type:  sv.SamplerType,  //"const", //固定采样
-			Param: sv.SamplerParam, //1,       //1=全采样、0=不采样
+			Type:  sv.config.SamplerType,  //"const", //固定采样
+			Param: sv.config.SamplerParam, //1,       //1=全采样、0=不采样
 		},
-
 		Reporter: &jaegerConfig.ReporterConfig{
-			LogSpans:           sv.LogSpans,
+			LogSpans:           sv.config.LogSpans,
 			LocalAgentHostPort: jaegerHostPort,
 		},
-
 		ServiceName: serviceName,
 	}
 
@@ -166,27 +138,4 @@ func clientGRPCInterceptor(tracer opentracing.Tracer, span opentracing.Span) grp
 		}
 		return err
 	}
-}
-
-// MDReaderWriter :
-type MDReaderWriter struct {
-	metadata.MD
-}
-
-// ForeachKey : implements Foreach Key of opentracing.TextMapReader
-func (c MDReaderWriter) ForeachKey(handler func(key, val string) error) error {
-	for k, vs := range c.MD {
-		for _, v := range vs {
-			if err := handler(k, v); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-// Set implements Set() of opentracing.TextMapWriter
-func (c MDReaderWriter) Set(key, val string) {
-	key = strings.ToLower(key)
-	c.MD[key] = append(c.MD[key], val)
 }

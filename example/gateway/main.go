@@ -10,7 +10,6 @@ import (
 	"github.com/go-liam/tracing/example/proto/read"
 	"github.com/go-liam/tracing/example/proto/speak"
 	"github.com/go-liam/tracing/example/proto/write"
-	"github.com/go-liam/tracing/jaeger"
 	"log"
 	"net/http"
 	"os"
@@ -37,7 +36,7 @@ func main() {
 // SetupRouter :
 func SetupRouter(engine *gin.Engine) {
 	//设置路由jaeger中间件
-	engine.Use(jaeger.Server.NewMiddlewareGinHandle(serverName))
+	engine.Use(trace2.NewGinMiddlewareHandle(serverName))
 	engine.GET("/", Index)
 	engine.GET("/api/trace", JaegerTest)               // 多微服trace
 	engine.GET("/api/trace/gin", JaegerTestGinRequest) // 简单http 跟踪demo
@@ -58,7 +57,7 @@ func JaegerTestGinRequest(c *gin.Context) {
 }
 
 func JaegerTestGrpc(c *gin.Context) {
-	conn := jaeger.Server.CreateGRPCConnectFromGin(config.UrlGrpc2Read, c, true)
+	conn := trace2.CreateGinToGRPCConnect(config.UrlGrpc2Read, c, true)
 	grpcReadClient := read.NewReadClient(conn)
 	resRead, _ := grpcReadClient.ReadData(context.Background(), &read.Request{Name: "read"})
 
@@ -68,22 +67,22 @@ func JaegerTestGrpc(c *gin.Context) {
 // JaegerTest :
 func JaegerTest(c *gin.Context) {
 	// 调用 gRPC 服务 listen
-	conn := trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc1Listen, c, true) // grpc_client.CreateServiceListenConn(c)
+	conn := trace2.CreateGinToGRPCConnect(config.UrlGrpc1Listen, c, true) // grpc_client.CreateServiceListenConn(c)
 	grpcListenClient := listen.NewListenClient(conn)
 	resListen, _ := grpcListenClient.ListenData(context.Background(), &listen.Request{Name: "listen"})
 
 	// 调用 gRPC 服务 speak
-	conn = trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc3Speak, c, true)
+	conn = trace2.CreateGinToGRPCConnect(config.UrlGrpc3Speak, c, true)
 	grpcSpeakClient := speak.NewSpeakClient(conn)
 	resSpeak, _ := grpcSpeakClient.SpeakData(context.Background(), &speak.Request{Name: "speak"})
 
 	// 调用 gRPC 服务 read
-	conn = trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc2Read, c, true)
+	conn = trace2.CreateGinToGRPCConnect(config.UrlGrpc2Read, c, true)
 	grpcReadClient := read.NewReadClient(conn)
 	resRead, _ := grpcReadClient.ReadData(context.Background(), &read.Request{Name: "read"})
 
 	// 调用 gRPC 服务 write
-	conn = trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc4Write, c, true)
+	conn = trace2.CreateGinToGRPCConnect(config.UrlGrpc4Write, c, true)
 	grpcWriteClient := write.NewWriteClient(conn)
 	resWrite, _ := grpcWriteClient.WriteData(context.Background(), &write.Request{Name: "write"})
 

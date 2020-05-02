@@ -17,8 +17,8 @@ import (
 func main() {
 	var s *grpc.Server
 	// 注入
-	if trace.Server.Config().IsOpen {
-		s = grpc.NewServer(trace.Server.NewGRPCServerOption("ServiceName")) // 注入trace
+	if tracing.Config().IsOpen {
+		s = grpc.NewServer(tracing.NewGRPCServerOption("ServiceName")) // 注入trace
 	} else {
 		s = grpc.NewServer()
 	}
@@ -39,8 +39,8 @@ func (s *ReadController) ReadData(ctx context.Context, in *read.Request) (*read.
 	//grpc
 	var conn *grpc.ClientConn
 	var err1 error
-	if trace.Server.Config().IsOpen {
-		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure(), trace.Server.CreateGRPCConnectOpts(&ctx)) // 注入
+	if tracing.Config().IsOpen {
+		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure(), tracing.CreateGRPCConnectOpts(&ctx)) // 注入
 	} else {
 		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure())
 	}
@@ -67,7 +67,7 @@ func httpGet(url string, ctx context.Context, openTrace bool) (string, error) {
 	}
 	// [TRACE] trace: 注入
 	if openTrace {
-		trace.Server.HttpTraceRequestInject(&ctx, &req.Header)
+		tracing.HttpTraceRequestInject(&ctx, &req.Header)
 	}
 	resp, err := client.Do(req)
 	if err != nil {

@@ -79,6 +79,12 @@ trace.Server.SetAttributes(&model.TraceModel{ IsOpen: true,HostPort: "127.0.0.1:
 
 [采样设置参考](https://www.jaegertracing.io/docs/1.17/sampling/)
 
+## 单元测试
+
+```shell script
+go test -coverpkg=./... -coverprofile=coverage.data ./...
+```
+
 ## 异常处理
 
 设置 trace属性  IsOpen = false,关掉服务。

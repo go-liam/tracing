@@ -32,7 +32,7 @@ func main() {
 // SetupRouter :
 func SetupRouter(engine *gin.Engine) {
 	//设置
-	engine.Use(trace2.Server.NewGinMiddlewareHandle(serverName))
+	engine.Use(trace2.NewGinMiddlewareHandle(serverName))
 	engine.GET("/", Index)
 	engine.GET("/api/trace", JaegerTest)
 	//404

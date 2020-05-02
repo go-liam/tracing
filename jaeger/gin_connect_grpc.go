@@ -11,13 +11,12 @@ import (
 )
 
 // CreateGinToGRPCConnect :创建grpc客户端链接
-func (sv *SvJeager) CreateGRPCConnectFromGin(serviceAddress string, c *gin.Context, openTrace bool) *grpc.ClientConn {
+func (sv *SvJeager) CreateGinToGRPCConnect(serviceAddress string, c *gin.Context, openTrace bool) *grpc.ClientConn {
 	var conn *grpc.ClientConn
 	var err error
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
-
-	if openTrace && sv.IsOpen {
+	if openTrace && sv.config.IsOpen {
 		// tracer
 		tracer, _ := c.Get("Tracer")
 		parentSpanContext, _ := c.Get("ParentSpanContext")

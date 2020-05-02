@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"github.com/gin-gonic/gin"
-	"github.com/go-liam/tracing/jaeger"
+	"github.com/go-liam/tracing"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -30,7 +30,7 @@ func HttpGet(url string, ctx context.Context, openTrace bool) (string, error) {
 	}
 	// [TRACE] trace: 注入
 	if openTrace {
-		jaeger.Server.HttpTraceRequestInject(&ctx, &req.Header)
+		tracing.HttpTraceRequestInject(&ctx, &req.Header)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -62,7 +62,7 @@ func HttpGetGin(url string, c *gin.Context, openTrace bool) (string, error) {
 	}
 	//[TRACE] 注入 tracer 传输
 	if openTrace {
-		jaeger.Server.HttpTracerGinRequestInject(c, &req.Header)
+		tracing.HttpGinTracerRequestInject(c, &req.Header)
 	}
 
 	resp, err := client.Do(req)

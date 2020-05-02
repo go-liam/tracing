@@ -7,7 +7,7 @@ import (
 	"github.com/go-liam/tracing"
 	"github.com/go-liam/tracing/example/pkg/config"
 	"github.com/go-liam/tracing/example/proto/listen"
-	"github.com/go-liam/tracing/config"
+	config2 "github.com/go-liam/tracing/config"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -15,9 +15,9 @@ import (
 
 func main() {
 	engine := gin.New()
-	trace.Server.SetAttributes(&config.TraceConfig{IsOpen: true, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
+	tracing.Init(&config2.TraceConfig{IsOpen: true, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
 	// 中间件
-	engine.Use(trace.Server.NewGinMiddlewareHandle("serverName"))
+	engine.Use(tracing.NewGinMiddlewareHandle("serverName"))
 	engine.GET("/test/http", apiHttp)
 	engine.GET("/test/grpc", apiGRPC)
 	//engine.Run(":7504")
@@ -30,7 +30,7 @@ func apiHttp(c *gin.Context) {
 }
 
 func apiGRPC(c *gin.Context) {
-	conn := trace.Server.CreateGinToGRPCConnect(config.UrlGrpc1Listen, c, true) // grpc_client.CreateServiceListenConn(c)
+	conn := tracing.CreateGinToGRPCConnect(config.UrlGrpc1Listen, c, true) // grpc_client.CreateServiceListenConn(c)
 	grpcListenClient := listen.NewListenClient(conn)
 	resListen, _ := grpcListenClient.ListenData(context.Background(), &listen.Request{Name: "listen"})
 	c.String(http.StatusOK, "Hello, "+resListen.Message)
@@ -50,7 +50,7 @@ func httpGetGin(url string, c *gin.Context, openTrace bool) (string, error) {
 	}
 	//[TRACE] 注入 tracer 传输
 	if openTrace {
-		trace.Server.HttpGinTracerRequestInject(c, &req.Header)
+		tracing.HttpGinTracerRequestInject(c, &req.Header)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
