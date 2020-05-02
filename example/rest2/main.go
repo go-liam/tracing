@@ -32,7 +32,7 @@ func main() {
 // SetupRouter :
 func SetupRouter(engine *gin.Engine) {
 	//设置路由中间件
-	engine.Use(trace2.Server.NewMiddlewareGinHandle(serverName))
+	engine.Use(trace2.Server.NewGinMiddlewareHandle(serverName))
 	engine.GET("/", Index)
 	engine.GET("/api/trace", JaegerTest)
 

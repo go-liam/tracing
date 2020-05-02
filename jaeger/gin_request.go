@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// HttpTracerGinRequestInject :  在gin 请求中注入
+// HttpGinTracerRequestInject :  在gin 请求中注入
 func (sv *SvJeager) HttpTracerGinRequestInject(c *gin.Context, reqHeader *http.Header) {
 	if !sv.IsOpen {
 		return

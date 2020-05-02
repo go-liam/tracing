@@ -1,7 +1,7 @@
-package model
+package config
 
 // 属性
-type TraceModel struct {
+type TraceConfig struct {
 	IsOpen       bool // 开关
 	HostPort     string //  "127.0.0.1:6831"
 	SamplerType  string  //固定采样

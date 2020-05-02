@@ -6,7 +6,7 @@ import (
 	"github.com/opentracing/opentracing-go/ext"
 )
 
-// NewMiddlewareGinHandle : AppName = "go-gin-api"
+// NewGinMiddlewareHandle : AppName = "go-gin-api"
 func (sv *SvJeager) NewMiddlewareGinHandle(appName string) gin.HandlerFunc {
 	if !sv.IsOpen {
 		return func(c *gin.Context) {

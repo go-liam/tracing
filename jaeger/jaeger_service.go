@@ -3,7 +3,7 @@ package jaeger
 import (
 	"context"
 	"fmt"
-	"github.com/go-liam/tracing/model"
+	"github.com/go-liam/tracing/config"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	traceLog "github.com/opentracing/opentracing-go/log"
@@ -20,11 +20,11 @@ import (
 
 // SvJeager ：
 type SvJeager struct {
-	model.TraceModel
+	config.TraceConfig
 }
 
 // 属性
-//type TraceModel struct {
+//type TraceConfig struct {
 //	IsOpen       bool // 开关
 //	HostPort     string //  "127.0.0.1:6831"
 //	SamplerType  string  //固定采样
@@ -32,7 +32,7 @@ type SvJeager struct {
 //	LogSpans     bool    // 打印日志
 //}
 
-func (sv *SvJeager) SetAttributes(info *model.TraceModel) {
+func (sv *SvJeager) SetAttributes(info *config.TraceConfig) {
 	sv.IsOpen = info.IsOpen
 	sv.HostPort = info.HostPort
 	sv.LogSpans = info.LogSpans
@@ -40,8 +40,8 @@ func (sv *SvJeager) SetAttributes(info *model.TraceModel) {
 	sv.SamplerType = info.SamplerType
 }
 
-func (sv *SvJeager) Attributes() *model.TraceModel {
-	info := new(model.TraceModel)
+func (sv *SvJeager) Attributes() *config.TraceConfig {
+	info := new(config.TraceConfig)
 	info.IsOpen = sv.IsOpen
 	info.HostPort = sv.HostPort
 	info.LogSpans = sv.LogSpans

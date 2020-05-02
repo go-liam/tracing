@@ -54,7 +54,7 @@ jaeger:
 ## 安装
 
 ```shell
-go get github.com/go-liam/trace
+go get github.com/go-liam/tracing
 ```
 
 ## 使用
@@ -67,7 +67,7 @@ go get github.com/go-liam/trace
 
 详情查看 [example/grpcdemo/main.go](example/grpcdemo/main.go)
 
-## 属性设置
+## 配置设置
 
 ```go
 import (

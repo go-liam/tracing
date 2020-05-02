@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// CreateGRPCConnectFromGin :创建grpc客户端链接
+// CreateGinToGRPCConnect :创建grpc客户端链接
 func (sv *SvJeager) CreateGRPCConnectFromGin(serviceAddress string, c *gin.Context, openTrace bool) *grpc.ClientConn {
 	var conn *grpc.ClientConn
 	var err error

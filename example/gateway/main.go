@@ -68,22 +68,22 @@ func JaegerTestGrpc(c *gin.Context) {
 // JaegerTest :
 func JaegerTest(c *gin.Context) {
 	// 调用 gRPC 服务 listen
-	conn := trace2.Server.CreateGRPCConnectFromGin(config.UrlGrpc1Listen, c, true) // grpc_client.CreateServiceListenConn(c)
+	conn := trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc1Listen, c, true) // grpc_client.CreateServiceListenConn(c)
 	grpcListenClient := listen.NewListenClient(conn)
 	resListen, _ := grpcListenClient.ListenData(context.Background(), &listen.Request{Name: "listen"})
 
 	// 调用 gRPC 服务 speak
-	conn = trace2.Server.CreateGRPCConnectFromGin(config.UrlGrpc3Speak, c, true)
+	conn = trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc3Speak, c, true)
 	grpcSpeakClient := speak.NewSpeakClient(conn)
 	resSpeak, _ := grpcSpeakClient.SpeakData(context.Background(), &speak.Request{Name: "speak"})
 
 	// 调用 gRPC 服务 read
-	conn = trace2.Server.CreateGRPCConnectFromGin(config.UrlGrpc2Read, c, true)
+	conn = trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc2Read, c, true)
 	grpcReadClient := read.NewReadClient(conn)
 	resRead, _ := grpcReadClient.ReadData(context.Background(), &read.Request{Name: "read"})
 
 	// 调用 gRPC 服务 write
-	conn = trace2.Server.CreateGRPCConnectFromGin(config.UrlGrpc4Write, c, true)
+	conn = trace2.Server.CreateGinToGRPCConnect(config.UrlGrpc4Write, c, true)
 	grpcWriteClient := write.NewWriteClient(conn)
 	resWrite, _ := grpcWriteClient.WriteData(context.Background(), &write.Request{Name: "write"})
 

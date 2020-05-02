@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 	var s *grpc.Server
-	if trace2.Server.Attributes().IsOpen {
+	if trace2.Server.Config().IsOpen {
 		s = grpc.NewServer(trace2.Server.NewGRPCServerOption(ServiceName)) // 注入trace
 	} else {
 		s = grpc.NewServer()

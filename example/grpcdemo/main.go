@@ -17,7 +17,7 @@ import (
 func main() {
 	var s *grpc.Server
 	// 注入
-	if trace.Server.Attributes().IsOpen {
+	if trace.Server.Config().IsOpen {
 		s = grpc.NewServer(trace.Server.NewGRPCServerOption("ServiceName")) // 注入trace
 	} else {
 		s = grpc.NewServer()
@@ -39,7 +39,7 @@ func (s *ReadController) ReadData(ctx context.Context, in *read.Request) (*read.
 	//grpc
 	var conn *grpc.ClientConn
 	var err1 error
-	if trace.Server.Attributes().IsOpen {
+	if trace.Server.Config().IsOpen {
 		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure(), trace.Server.CreateGRPCConnectOpts(&ctx)) // 注入
 	} else {
 		conn, err1 = grpc.Dial(config.UrlGrpc1Listen, grpc.WithInsecure())
