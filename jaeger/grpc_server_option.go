@@ -8,7 +8,7 @@ import (
 
 // NewGRPCServerOption :
 func (sv *SvJeager) NewGRPCServerOption(serviceName string) grpc.ServerOption {
-	if !sv.config.IsOpen {
+	if sv.config ==nil || !sv.config.IsOpen {
 		return nil
 	}
 	tracer, _, err := sv.NewJaegerTracer(serviceName, config.JaegerHostPort)

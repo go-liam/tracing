@@ -8,7 +8,7 @@ import (
 
 // NewGinMiddlewareHandle : AppName = "go-gin-api"
 func (sv *SvJeager) NewGinMiddlewareHandle(appName string) gin.HandlerFunc {
-	if !sv.config.IsOpen {
+	if sv.config ==nil || !sv.config.IsOpen {
 		return func(c *gin.Context) {
 			c.Next()
 		}

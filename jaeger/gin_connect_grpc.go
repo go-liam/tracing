@@ -16,7 +16,7 @@ func (sv *SvJeager) CreateGinToGRPCConnect(serviceAddress string, c *gin.Context
 	var err error
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
-	if openTrace && sv.config.IsOpen {
+	if openTrace && sv.config !=nil && sv.config.IsOpen {
 		// tracer
 		tracer, _ := c.Get("Tracer")
 		parentSpanContext, _ := c.Get("ParentSpanContext")
