@@ -14,6 +14,7 @@ var Sv InTrace
 func init() {
 	// 接入 jaeger
 	Sv = new(jaeger.SvJeager)
+	Sv.Init(&config.TraceConfig{IsOpen: true, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
 }
 
 // Init :
