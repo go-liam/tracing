@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-liam/tracing/config"
 	"github.com/go-liam/tracing/jaeger"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 	"net/http"
 )
@@ -58,4 +59,16 @@ func CreateGRPCConnectOpts(ctx *context.Context) grpc.DialOption {
 // HttpTraceRequestInject :
 func HttpTraceRequestInject(ctx *context.Context, reqHeader *http.Header) {
 	Sv.HttpTraceRequestInject(ctx, reqHeader)
+}
+
+func NewMiddlewareHandle(serverName string) http.Handler {
+	return Sv.NewMiddlewareHandle(serverName)
+}
+
+func HttpTracerRequestInject(req *http.Request, serverName string) (opentracing.Span, *http.Request) {
+	return Sv.HttpTracerRequestInject(req, serverName)
+}
+
+func OnError(span opentracing.Span, err error) {
+	Sv.OnError(span, err)
 }

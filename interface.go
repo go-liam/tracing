@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/go-liam/tracing/config"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 	"net/http"
 )
@@ -19,4 +20,8 @@ type InTrace interface {
 	NewGRPCServerOption(serviceName string) grpc.ServerOption
 	CreateGRPCConnectOpts(ctx *context.Context) grpc.DialOption          // grpc trace
 	HttpTraceRequestInject(ctx *context.Context, reqHeader *http.Header) // http trace
+	// http 服务（非 gin）
+	NewMiddlewareHandle(serverName string) http.Handler
+	HttpTracerRequestInject( req *http.Request,serverName string) (opentracing.Span,*http.Request)
+	OnError(span opentracing.Span, err error)
 }
