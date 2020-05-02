@@ -13,16 +13,16 @@ import (
 )
 
 const (
-	part       = config.PortRest2 //":7422"
+	port       = config.PortRest2 //":7422"
 	serverName = "liam-server-rest2"
 )
 
 func main() {
-	println("run api part ", part)
+	println("run api port ", port)
 	engine := gin.New()
 	// 设置路由
 	SetupRouter(engine)
-	engine.Run(part)
+	engine.Run(port)
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit

@@ -17,16 +17,16 @@ import (
 )
 
 const (
-	part       = ":7410"
+	port       = ":7410"
 	serverName = "liam-api-gateway"
 )
 
 func main() {
-	println("run api part ", part)
+	println("run api port ", port)
 	engine := gin.New()
 	// 设置路由
 	SetupRouter(engine)
-	engine.Run(part)
+	engine.Run(port)
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit

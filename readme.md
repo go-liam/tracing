@@ -57,7 +57,7 @@ jaeger:
 go get github.com/go-liam/tracing
 ```
 
-## 使用
+## 使用(默认单实例)
 
 ### Gin服务器
 
@@ -67,14 +67,17 @@ go get github.com/go-liam/tracing
 
 详情查看 [example/grpcdemo/main.go](example/grpcdemo/main.go)
 
+## 多实例应用
+
+详情查看 [tracing.go](tracing.go) ,在自己项目 Sv2 := new(jaeger.SvJeager) 然后全局使用它就行了。
+
 ## 配置设置
 
 ```go
 import (
     "github.com/go-liam/tracing"
 )
-
-trace.Server.SetAttributes(&model.TraceModel{ IsOpen: true,HostPort: "127.0.0.1:6831",SamplerType: "const",SamplerParam: 0.01,LogSpans: true})
+	tracing.Init(&config.TraceConfig{IsOpen: false, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
 ```
 
 [采样设置参考](https://www.jaegertracing.io/docs/1.17/sampling/)
@@ -82,7 +85,7 @@ trace.Server.SetAttributes(&model.TraceModel{ IsOpen: true,HostPort: "127.0.0.1:
 ## 单元测试
 
 ```shell script
-go test -coverpkg=./... -coverprofile=coverage.data ./...
+go test $(go list ./... | grep -v /example/) -coverprofile=coverage.data ./...
 ```
 
 ## 异常处理
