@@ -19,6 +19,7 @@ import (
 // SvJeager ：
 type SvJeager struct {
 	config *config.TraceConfig
+	Tracer opentracing.Tracer
 }
 
 func (sv *SvJeager) Init(info *config.TraceConfig) {
@@ -29,7 +30,7 @@ func (sv *SvJeager) Config() *config.TraceConfig {
 	return sv.config
 }
 
-var Tracer opentracing.Tracer
+//var Tracer opentracing.Tracer
 
 func (sv *SvJeager) NewJaegerTracer(serviceName string, jaegerHostPort string) (opentracing.Tracer, io.Closer, error) {
 	// 采样设置：https://www.jaegertracing.io/docs/1.17/sampling/
@@ -47,12 +48,12 @@ func (sv *SvJeager) NewJaegerTracer(serviceName string, jaegerHostPort string) (
 
 	var closer io.Closer
 	var err error
-	Tracer, closer, err = cfg.NewTracer(jaegerConfig.Logger(jaeger.StdLogger))
+	sv.Tracer, closer, err = cfg.NewTracer(jaegerConfig.Logger(jaeger.StdLogger))
 	if err != nil {
 		panic(fmt.Sprintf("ERROR: cannot init Jaeger: %v\n", err))
 	}
-	opentracing.SetGlobalTracer(Tracer)
-	return Tracer, closer, err
+	opentracing.SetGlobalTracer(sv.Tracer)
+	return sv.Tracer, closer, err
 }
 
 // ServerInterceptor grpc server

@@ -10,5 +10,5 @@ func (sv *SvJeager) CreateGRPCConnectOpts(ctx *context.Context) grpc.DialOption 
 	if sv.config ==nil || !sv.config.IsOpen {
 		return nil
 	}
-	return grpc.WithUnaryInterceptor(clientInterceptor(Tracer, *ctx))
+	return grpc.WithUnaryInterceptor(clientInterceptor(sv.Tracer, *ctx))
 }

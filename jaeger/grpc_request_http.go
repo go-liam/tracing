@@ -22,7 +22,7 @@ func (sv *SvJeager) HttpTraceRequestInject(ctx *context.Context, reqHeader *http
 	)
 	span.Finish()
 	// trace: trans
-	injectErr := Tracer.Inject(span.Context(), opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(*reqHeader))
+	injectErr := sv.Tracer.Inject(span.Context(), opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(*reqHeader))
 	if injectErr != nil {
 		log.Printf("[ERROR] HttpTraceRequestInject= %+v\n", injectErr)
 		//log.Fatalf("%s: Couldn't inject headers", err)

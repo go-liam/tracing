@@ -86,6 +86,8 @@ import (
 
 ```shell script
 go test $(go list ./... | grep -v /example/) -coverprofile=coverage.data ./...
+
+go test -coverpkg=./... -coverprofile=coverage.data ./...
 ```
 
 ## 异常处理
