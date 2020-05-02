@@ -37,7 +37,7 @@ func CreateGinToGRPCConnect(serviceAddress string, c *gin.Context, openTrace boo
 
 // HttpGinTracerRequestInject :
 func HttpGinTracerRequestInject(c *gin.Context, reqHeader *http.Header) {
-	HttpGinTracerRequestInject(c, reqHeader)
+	Sv.HttpGinTracerRequestInject(c, reqHeader)
 }
 
 // NewGRPCServerOption :
