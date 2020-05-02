@@ -16,7 +16,7 @@ func init() {
 	Sv = new(jaeger.SvJeager)
 	if Sv.Config() == nil || Sv.Config().HostPort == "" {
 		println("[WARNING]Must set configuration information")
-		Sv.Init(&config.TraceConfig{IsOpen: true, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
+		Sv.Init(config.DefaultConfig)
 	}
 }
 

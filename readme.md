@@ -75,9 +75,12 @@ go get github.com/go-liam/tracing
 
 ```go
 import (
-    "github.com/go-liam/tracing"
+	"github.com/go-liam/tracing"
+	"github.com/go-liam/tracing/config"
 )
-	tracing.Init(&config.TraceConfig{IsOpen: false, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
+func init()  {
+	tracing.Init(&config.TraceConfig{IsOpen: true, HostPort: "127.0.0.1:6831", SamplerType: "const", SamplerParam: 0.01, LogSpans: true})
+}
 ```
 
 [采样设置参考](https://www.jaegertracing.io/docs/1.17/sampling/)
